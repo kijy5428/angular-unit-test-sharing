@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
@@ -12,11 +13,18 @@
     "importHelpers": true,
     "target": "es2015",
     "typeRoots": [
-      "node_modules/@types"
+      "node_modules/@types"],
+    // "typeRoots": [
+    //   "./node_modules/phaser/types"
+    // ],
+    "types": [
+      "Phaser",
+      // "jasminewd2"
     ],
     "lib": [
       "es2018",
-      "dom"
+      "dom",
+      "scripthost"
     ]
   },
   "angularCompilerOptions": {
