@@ -12,21 +12,13 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
-    "typeRoots": [
-      "node_modules/@types"],
-    // "typeRoots": [
-    //   "./node_modules/phaser/types"
-    // ],
+    "typeRoots": ["node_modules/@types"],
     "types": [
-      "Phaser",
-      // "jasminewd2"
+      "Phaser"
     ],
-    "lib": [
-      "es2018",
-      "dom",
-      "scripthost"
-    ]
+    "lib": ["es2018", "dom", "scripthost"]
   },
+  "include": ["src/**/*.ts", "node_modules/@types", "src/**/*.spec.ts"],
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true

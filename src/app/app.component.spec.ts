@@ -5,23 +5,46 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports:[],
       declarations: [
         AppComponent
       ],
-      schemas:  [ NO_ERRORS_SCHEMA ]
-    }).compileComponents();
+      providers:[],
+      schemas:[NO_ERRORS_SCHEMA]
+    });
   }));
 
-  it('should create the app', () => {
+  xit('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'down-stairs'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('down-stairs');
+  it('should create the app', () => {
+    const spiderMan = {
+      fly: () => 'flying' ,
+      spining: () => 'spining'
+    };
+
+    spyOn(spiderMan, 'spining').and.returnValue('running');
+    const result = spiderMan.spining();
+    expect(result).toBe('running');
   });
+
+  it('should create the app', () => {
+    const spiderMan = { fly: () => 'flying' } as any;
+    spiderMan.spinning = jasmine.createSpy('spinning').and.returnValue('spinning');
+    const result = spiderMan.spinning();
+    expect(result).toBe('spinning');
+  });
+
+  it('should create the app', () => {
+    const spiderMan = jasmine.createSpyObj('spiderMan', ['spinning']);
+    spiderMan.spinning.and.returnValue('spinning');
+    const result = spiderMan.spinning();
+    expect(result).toBe('spinning');
+  });
+
+
 
 });

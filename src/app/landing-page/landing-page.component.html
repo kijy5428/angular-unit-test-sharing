@@ -1,6 +1,20 @@
-<div class="container">
-  <div class="card">
-      <img src="assets/img/logo.png" alt="">
-
-</div>
-</div>
+    <div class="container">
+      <div class="row">
+        <div class="col-5 mx-auto">
+          <div class="card mt-4">
+            <div class="card-header">
+              <img src="assets/img/logo.png" alt="" style="display:inline-block;width:100%">
+            </div>
+            <div class="card-body ">
+              <form [formGroup]="userLoginForm">
+              <div class="form-group">
+                <label for="exampleInputEmail1" class="h5">User ID : </label>
+                <input type="text" class="form-control my-2" formControlName="userId" [(ngModel)]="userID">
+              </div>
+              <button class="btn btn-primary w-100" [disabled]="!userLoginForm.valid" (click)="handleUserID()">Let's Go!</button>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

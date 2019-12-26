@@ -1,16 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import Phaser from 'phaser';
+import { ThemeService } from '../theme.service';
 const Width = 1600;
 const Height = 900;
+
+export enum themeEnum {
+  normal,
+  christmas
+}
 @Component({
   selector: 'app-game-component',
   templateUrl: './game-component.component.html',
   styleUrls: ['./game-component.component.css']
 })
-export class GameComponentComponent implements OnInit {
+export class GameComponentComponent implements OnInit, OnDestroy {
   phaserGame: Phaser.Game;
   config: Phaser.Types.Core.GameConfig;
-  constructor() {
+  theme;
+  constructor(public themeSerivce: ThemeService) {
+    this.theme = themeEnum.christmas;
     this.config = {
       type: Phaser.AUTO,
       height: 900,
@@ -20,15 +28,17 @@ export class GameComponentComponent implements OnInit {
       physics: {
         default: 'arcade',
         arcade: {
-          gravity: { y: 500 },
-          debug: true,
-
+          gravity: { y: 500 }
         }
       }
     };
   }
   ngOnInit() {
     this.phaserGame = new Phaser.Game(this.config);
+  }
+
+  ngOnDestroy() {
+    this.phaserGame.destroy(true);
   }
 }
 
@@ -54,21 +64,18 @@ class Ground extends Phaser.Physics.Arcade.Image {
     if (this.y < 0) {
       this.setActive(false);
       this.setVisible(false);
-      if (this.active === true) {
-        this.destroy();
       }
     }
   }
 
-}
+
 
 class Idiot extends Phaser.Physics.Arcade.Sprite {
   rnd: Phaser.Math.RandomDataGenerator = new Phaser.Math.RandomDataGenerator();
-
+  scene: any;
   constructor(scene, x, y, texture) {
     super(scene, x, y, texture);
-
-    this.setTexture('brain');
+    this.scene = scene;
     this.setPosition(x, y);
     // this.body.gravity.y = 1000;
     // this.setXV
@@ -77,6 +84,8 @@ class Idiot extends Phaser.Physics.Arcade.Sprite {
   reJoinGame() {
     this.setPosition(this.rnd.between(0, Width), 100);
     this.setVelocity(0, 0);
+    this.scene.score = 0;
+    this.scene.scoreText.setText('Score: ' + 0);
   }
 
   preUpdate(time, delta) {
@@ -95,6 +104,10 @@ class MainScene extends Phaser.Scene {
   bullets;
   speed;
   ground;
+  theme;
+  scoreText;
+  score = 0;
+  timedEvent;
   rnd: Phaser.Math.RandomDataGenerator;
   grounds: Phaser.Physics.Arcade.StaticGroup;
   constructor() {
@@ -105,11 +118,11 @@ class MainScene extends Phaser.Scene {
 
 
     const info = this.add.text(0, 0, 'Click to add objects', { fill: '#00ff00' });
-
+    this.theme = this.registry.list['theme'] === themeEnum.christmas ? 'bg' : 'ground';
     this.grounds = this.physics.add.staticGroup({
       classType: Ground,
       key: 'ground',
-      maxSize: 35,
+      maxSize: 20,
       runChildUpdate: true,
       setScale: {x: 0.1, y: 0.1}
     });
@@ -117,6 +130,7 @@ class MainScene extends Phaser.Scene {
     this.speed = Phaser.Math.GetSpeed(300, 1);
 
     this.add.image(800, 450, 'bg').setScale(0.8);
+    this.scoreText = this.add.text(50, 50, 'score: 0', { fontSize: '32px', fill: '#000' });
     this.ground = this.physics.add.staticGroup(
       {
         classType: Ground,
@@ -133,7 +147,7 @@ class MainScene extends Phaser.Scene {
       ground.setScale(0.7, 0.7);
     }
 
-
+    this.timedEvent = this.time.addEvent({ delay: 1500, callback: this.addScore, callbackScope: this, loop: true });
 
     // for the player
     // this.player = this.physics.add.sprite(100, 490, 'char2');
@@ -197,13 +211,11 @@ class MainScene extends Phaser.Scene {
       this.player.setVelocityX(-200);
 
       this.player.anims.play('left', true);
-    }
-    else if (this.cursors.right.isDown) {
+    } else if (this.cursors.right.isDown) {
       this.player.setVelocityX(200);
 
       this.player.anims.play('right', true);
-    }
-    else {
+    } else {
       this.player.setVelocityX(0);
 
       this.player.anims.play('turn');
@@ -223,6 +235,12 @@ class MainScene extends Phaser.Scene {
       }
     }
   }
+
+  addScore() {
+    this.score += 10;
+    this.scoreText.setText('Score:' + this.score);
+  }
+
 
 }
 
