@@ -6,7 +6,6 @@ import { GameComponentComponent } from './game-component/game-component.componen
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MainPageComponent } from './main-page/main-page.component';
 import { GameInfoComponent } from './game-info/game-info.component';
 
 const appRoutes: Routes = [
@@ -24,7 +23,6 @@ const appRoutes: Routes = [
     AppComponent,
     GameComponentComponent,
     LandingPageComponent,
-    MainPageComponent,
     GameInfoComponent
   ],
   imports: [

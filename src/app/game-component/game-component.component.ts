@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import Phaser from 'phaser';
-import { ThemeService } from '../theme.service';
 const Width = 1600;
 const Height = 900;
 
@@ -17,7 +16,7 @@ export class GameComponentComponent implements OnInit, OnDestroy {
   phaserGame: Phaser.Game;
   config: Phaser.Types.Core.GameConfig;
   theme;
-  constructor(public themeSerivce: ThemeService) {
+  constructor() {
     this.theme = themeEnum.christmas;
     this.config = {
       type: Phaser.AUTO,
@@ -77,8 +76,6 @@ class Idiot extends Phaser.Physics.Arcade.Sprite {
     super(scene, x, y, texture);
     this.scene = scene;
     this.setPosition(x, y);
-    // this.body.gravity.y = 1000;
-    // this.setXV
   }
 
   reJoinGame() {
@@ -93,7 +90,6 @@ class Idiot extends Phaser.Physics.Arcade.Sprite {
     if (this.y > Height) {
       this.reJoinGame();
     }
-
   }
 
 }
@@ -118,7 +114,6 @@ class MainScene extends Phaser.Scene {
 
 
     const info = this.add.text(0, 0, 'Click to add objects', { fill: '#00ff00' });
-    this.theme = this.registry.list['theme'] === themeEnum.christmas ? 'bg' : 'ground';
     this.grounds = this.physics.add.staticGroup({
       classType: Ground,
       key: 'ground',
@@ -149,8 +144,6 @@ class MainScene extends Phaser.Scene {
 
     this.timedEvent = this.time.addEvent({ delay: 1500, callback: this.addScore, callbackScope: this, loop: true });
 
-    // for the player
-    // this.player = this.physics.add.sprite(100, 490, 'char2');
     this.player = new Idiot(this, 101, 400, 'char2');
     this.add.existing(this.player);
     const playerPhysic = this.physics.add.existing(this.player);
